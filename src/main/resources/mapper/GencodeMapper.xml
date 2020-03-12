@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.GencodeMapper">
+  <resultMap id="BaseResultMap" type="com.demo.entity.Gencode">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ord" jdbcType="INTEGER" property="ord" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <select id="getBaseInfo" parameterType="com.demo.entity.Gencode" resultMap="BaseResultMap">
+    select
+        g.`value`,
+        g.`name`
+    FROM gencode g
+    <where>
+      <if test="type !=null and type != ''">
+        g.`type` = #{type}
+      </if>
+    </where>
+  </select>
+</mapper>

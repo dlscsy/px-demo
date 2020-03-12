@@ -13,6 +13,7 @@ public class ResultUtil {
     private String message;
     private int data;
     private List list;
+    private int code;
 
     public List getList() {
         return list;
@@ -46,4 +47,11 @@ public class ResultUtil {
         this.data = data;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 }

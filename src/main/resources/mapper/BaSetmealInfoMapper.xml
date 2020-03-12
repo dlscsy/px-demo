@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.BaSetmealInfoMapper">
+  <resultMap id="BaseResultMap" type="com.demo.entity.BaSetmealInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="meal_code" jdbcType="VARCHAR" property="mealCode" />
+    <result column="meal_name" jdbcType="VARCHAR" property="mealName" />
+    <result column="meal_type" jdbcType="VARCHAR" property="mealType" />
+    <result column="effective_date" jdbcType="DATE" property="effectiveDate" />
+    <result column="expiry_date" jdbcType="DATE" property="expiryDate" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="operatetime" jdbcType="DATE" property="operatetime" />
+  </resultMap>
+
+  <insert id="addInfo" parameterType="com.demo.entity.BaSetmealInfo">
+        insert into ba_setmeal_info(guid,meal_code,meal_name,meal_type,effective_date,expiry_date,status,operator,operatetime)
+        values (#{guid},#{mealCode},#{mealName},#{mealType},#{effectiveDate,jdbcType=DATE},#{expiryDate,jdbcType=DATE},#{status},#{operator},#{operatetime,jdbcType=DATE})
+    </insert>
+  <delete id="deleteInfo" parameterType="java.util.List">
+    delete from ba_setmeal_info
+    where guid in
+    <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+      #{item.guid}
+    </foreach>
+  </delete>
+  <update id="updateInfo" parameterType="com.demo.entity.BaSetmealInfo">
+    update ba_setmeal_info
+    <set>
+      <if test="mealCode!=null and mealCode!=''">
+        meal_code=#{mealCode},
+      </if>
+      <if test="mealName!=null and mealName!=''">
+        meal_name=#{mealName},
+      </if>
+      <if test="mealType!=null and mealType!=''">
+        meal_type=#{mealType},
+      </if>
+      <if test="effectiveDate!=null">
+        effective_date=#{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="expiryDate!=null">
+        expiry_date=#{expiryDate,jdbcType=DATE},
+      </if>
+      <if test="status!=null and status!=''">
+        status=#{status},
+      </if>
+      <if test="operator!=null and operator!=''">
+        operator=#{operator},
+      </if>
+      <if test="operatetime!=null">
+        operatetime=#{operatetime,jdbcType=DATE},
+      </if>
+    </set>
+    <where>
+      <if test="guid!=null and guid!=''">
+        guid = #{guid}
+      </if>
+    </where>
+  </update>
+
+  <select id="getAllInfo" parameterType="com.demo.entity.BaSetmealInfo" resultMap="BaseResultMap">
+    select guid,meal_code,meal_name,meal_type,effective_date,expiry_date,status,operator,operatetime from ba_setmeal_info
+    <where>
+      <if test="mealCode !=null and mealCode != ''">
+        and meal_code like CONCAT('%',#{mealCode},'%')
+      </if>
+      <if test="mealType !=null and mealType != ''">
+        and meal_type=#{mealType}
+      </if>
+      <if test="operatetime != null">
+        <![CDATA[ and effective_date <= #{operatetime,jdbcType=DATE}]]>
+      </if>
+      <if test="operatetime != null">
+        <![CDATA[ and expiry_date >= #{operatetime,jdbcType=DATE}]]>
+      </if>
+
+      <if test="mealTypeTree!=null and mealTypeTree.size>0">
+        and meal_type in
+        <foreach collection="mealTypeTree" item="mealType" index="i" open="(" close=")" separator=",">
+          #{mealType}
+        </foreach>
+      </if>
+
+    </where>
+  </select>
+</mapper>
